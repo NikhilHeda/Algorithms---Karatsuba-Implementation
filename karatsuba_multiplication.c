@@ -6,6 +6,7 @@
 int get_decimal(char d){
 	return d - '0';
 }
+dfcdf;
 
 char get_character(int d){
 	return (char) (d + '0');
