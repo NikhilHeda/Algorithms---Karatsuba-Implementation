@@ -131,40 +131,55 @@ char *sub(char *A, char *B){
 
 char *karatsuba(char *A, char *B, int k){
 	//Multiplication of large integers a and b of 2 k decimal digits
-	if(k == 0) {
-		int temp = get_decimal(A[0]) * get_decimal(B[0]);
+	if(k == 1 && strlen(A) == 2 && strlen(B) == 2 && A[0] == '0' && B[0] == '0') {
+		int temp = get_decimal(A[1]) * get_decimal(B[1]);
 		char* result;
-		result = (char*) malloc(sizeof(char) * 2);
+		result = (char*) malloc(sizeof(char) * 3);
 		result[0] = get_character(temp / 10);
 		result[1] = get_character(temp % 10);
+		result[2]='\0';
+		return result;
+	}
+	else if(k == 0)
+	{
+		int temp = get_decimal(A[0]) * get_decimal(B[0]);
+		char* result;
+		result = (char*) malloc(sizeof(char) * 3);
+		result[0] = get_character(temp / 10);
+		result[1] = get_character(temp % 10);
+		result[2]='\0';
 		return result;
 	}
 	
 	int n = (int)pow(2, k);
 	
-	char *A1 = &A[0];
+	char *A1 = (char *)malloc((n/2+1)*sizeof(char));
+	strncpy(A1,A,n/2);
+	A1[n/2] = '\0';
+	
 	char *A2 = &A[n/2];
-	char *B1 = &B[0];
+	
+	char *B1 = (char *)malloc((n/2+1)*sizeof(char));
+	strncpy(B1,B,n/2);
+	B1[n/2]='\0';
+
 	char *B2 = &B[n/2];
 
 	char *p1 = karatsuba(A1, B1, k-1);
-	printf("p1: %s\n", p1);
 
 	char *p2 = karatsuba(A2, B2, k-1);
-	printf("p2: %s\n", p2);
+	
+	int newk = get_nearest_power(strlen(add(A1,A2)));
 
-	char *p3 = karatsuba(add(A1, A2), add(B1, B2), k);
-	printf("p3: %s\n", p3);
+	char *p3 = karatsuba(add(A1, A2), add(B1, B2), newk);
 
-/*
-	char *temp1 = append_zeroes(p1, n);
-
-	char *temp2 = sub(sub(p3, p2), p1);
+	char *temp1 = sub(p3,p1);
+	char *temp2 = sub(temp1, p2);
 
 	temp2 = append_zeroes(temp2, n/2);
+	char *temp3 = append_zeroes(p1, n);
 
-	return add(add(temp1, temp2), p2);
-*/
+	return add(add(temp3, temp2), p2);
 }
 
 int main(){
@@ -183,15 +198,6 @@ int main(){
 	A = prepend_zeroes(A, ((int)pow(2, k)) - a);
 	B = prepend_zeroes(B, ((int)pow(2, k)) - b);
 	printf("%s\n", karatsuba(A, B, k));
-
-	/*
-	
-	char *sum = add(A, B);
-	printf("%s\n", sum);
-
-	char *diff = sub(A, B);
-	printf("%s\n", diff);
-	*/
 
 	return 0;
 }
