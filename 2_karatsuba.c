@@ -3,8 +3,6 @@
 #include <string.h>
 #include <math.h>
 
-
-
 long long int get_decimal(char d){
 	return d - '0';
 }
@@ -252,7 +250,7 @@ int main(){
 	A = prepend_zeroes(A, ((long long int)pow(2, k)) - a);
 	B = prepend_zeroes(B, ((long long int)pow(2, k)) - b);
 	
-		printf("A:%s\nB:%s\n\n\n",A,B);
+	printf("A:%s\nB:%s\n\n\n",A,B);
 
 	printf("**calling karatsuba**");
 	printf("%s\n", karatsuba(A, B, k));
